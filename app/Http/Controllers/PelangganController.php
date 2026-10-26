@@ -21,7 +21,7 @@ class PelangganController extends Controller
      */
     public function create()
     {
-        //
+        return view('pelanggan.create');
     }
 
     /**
@@ -29,7 +29,20 @@ class PelangganController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode_pelanggan' => 'required|unique:pelanggans,kode_pelanggan',
+            'nama' => 'required',
+            'kategori' => 'required',
+            'email' => 'required|email|unique:pelanggans,email',
+            'tanggal_daftar' => 'required|date',
+            'alamat' => 'required',
+            'keterangan' => 'nullable',
+        ]);
+
+        Pelanggan::create($request->all());
+
+        return redirect()->route('pelanggan.index')
+                         ->with('success', 'Pelanggan created successfully.');
     }
 
     /**
